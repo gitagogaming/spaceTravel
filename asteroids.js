@@ -73,9 +73,10 @@ class Asteroids {
 
     updateAsteroids() {
         this.asteroids.forEach((asteroid) => {
-            asteroid.y += this.asteroidFallSpeed;
+            // asteroid.y += this.asteroidFallSpeed;
+            asteroid.y += asteroid.speed; // Adjusting speed of asteroid based upon itself
             asteroid.rotation += asteroid.rotationSpeed;
-
+            
             if (this.hasCollided(asteroid)) {
                 gameIsOver();
                 return;

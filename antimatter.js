@@ -22,8 +22,10 @@ class AntiMatterManager {
 
           let x = Math.random() * canvas.width;
           let y = -100;
+          let randomSpeed = Math.random() * this.antiMatterFallSpeed + 1; // Assign a random speed
 
-          this.antiMatterElements.push({ x, y, size });
+
+          this.antiMatterElements.push({ x, y, size, speed:randomSpeed });
 
       }, this.antiMatterSpawnRate); // How often to spawn anti-matter
   }
@@ -38,7 +40,10 @@ class AntiMatterManager {
           ctx.fill();
           ctx.closePath();
 
-          element.y += this.antiMatterFallSpeed;
+          // element.y += this.antiMatterFallSpeed;
+          element.y += element.speed; // Use individual element speed
+
+          
 
           // Check for collision with the spaceship
           if (this.hasCollided(element)) {
