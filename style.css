@@ -178,6 +178,14 @@ a{
   right: 40px;
 }
 
+#shipSpeed{
+  display: none;
+  color: rgb(255, 0, 0);
+  position: fixed;
+  top: 70px;
+  right: 40px;
+}
+
 .gameName{
   animation: floating 3s ease-in-out infinite;
 }
@@ -187,13 +195,19 @@ a{
 .credit{
   position: absolute;
   top: 93vh;
-
+  /* Removing ability to 'highlight' the credits mistakenly which clicking antimatter which can be distracting */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge */
+  user-select: none;         /* Chrome, Opera, and Edge */
 }
+
 .creditInfo{
   position: absolute;
-  top: 92vh;
+  top: 95vh;
   font-size: 0.4em;
   left: 33vw;
+  
 }
 
 /* ANimations */
@@ -236,20 +250,21 @@ a{
 }
 
 
+
 /* Media quries */
 @media (min-width:769px){
   .controls{
     display: none !important;
   }
   h1{
-    font-size: 6.5em !important;
+    font-size: 5.5em !important;
   }
   h3{
     font-size: 1.75rem;
   }
 
   p,li,ul{
-    font-size: 1.125rem;
+    font-size: 1.0rem;
   }
 
   .startButton{
