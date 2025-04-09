@@ -1,7 +1,7 @@
 /* @Author: Nirajan Shrestha
    July 27,2024 
 */
-import { startDistanceScore, asteroids, shipRectUpdate, canvas, ctx, antiMatterManager, asteroidManager, bulletManager, bulletCooldown, maxBulletCooldown, updateBulletCooldown, handleBulletAsteroidCollision } from './gameState.js';
+import { startDistanceScore, asteroids, shipRectUpdate, canvas, ctx, antiMatterManager, asteroidManager, bulletManager, bulletCooldown, maxBulletCooldown, updateBulletCooldown, handleBulletAsteroidCollision, updateParticles, drawParticles } from './gameState.js';
 // import { createAsteroid, updateAsteroids, drawAsteroid } from './asteroids.js';
 import { addStar, drawStars } from './createStars.js';
 import { mobileControls } from './mobileControls.js';
@@ -104,8 +104,15 @@ function gameLoop() {
     // Check for bullet-asteroid collisions
     bulletManager.checkBulletAsteroidCollision(asteroids, handleBulletAsteroidCollision);
     
+    // Update and draw explosions
+    updateParticles();
+    
     asteroidManager.updateAsteroids();
     asteroids.forEach(asteroidManager.drawAsteroid);
     antiMatterManager.drawAntiMatter();
+    
+    // Draw particles on top of everything else
+    drawParticles();
+    
     requestAnimationFrame(gameLoop);
 }

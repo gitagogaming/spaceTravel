@@ -40,6 +40,9 @@ export let bullets = [];             // Array to store all bullets
 export let bulletCooldown = 0;       // Cooldown timer for shooting
 export const maxBulletCooldown = 20; // Maximum cooldown time between shots
 
+// Explosion particles
+export let particles = [];           // Array to store explosion particles
+
 // Managers for the antimatter and asteroids
 export const antiMatterManager = new AntiMatterManager();
 export const asteroidManager = new AsteroidManager();
@@ -185,6 +188,14 @@ export function decreaseGameSpeed(){
 
 // Handle bullet-asteroid collision
 export function handleBulletAsteroidCollision(bulletIndex, asteroidIndex) {
+    // Get the position of the asteroid before removing it
+    const asteroid = asteroids[asteroidIndex];
+    const explosionX = asteroid.x + asteroid.width / 2;
+    const explosionY = asteroid.y + asteroid.height / 2;
+    
+    // Create explosion effect at the asteroid's position
+    createExplosion(explosionX, explosionY);
+    
     // Remove the bullet and asteroid that collided
     bullets.splice(bulletIndex, 1);
     asteroids.splice(asteroidIndex, 1);
@@ -192,6 +203,74 @@ export function handleBulletAsteroidCollision(bulletIndex, asteroidIndex) {
     // Add points for destroying an asteroid
     matterValue += 5;
     anitMatterScore.innerHTML = matterValue;
+}
+
+// Create explosion particles at the given position
+export function createExplosion(x, y) {
+    const particleCount = 20;
+    const colors = ['#FFA500', '#FF4500', '#FF8C00', '#FFD700', '#FFFF00'];
+    
+    for (let i = 0; i < particleCount; i++) {
+        const size = Math.random() * 4 + 1;
+        const speed = Math.random() * 3 + 1;
+        const angle = Math.random() * Math.PI * 2;
+        const velocityX = Math.cos(angle) * speed;
+        const velocityY = Math.sin(angle) * speed;
+        
+        particles.push({
+            x: x,
+            y: y,
+            size: size,
+            velocityX: velocityX,
+            velocityY: velocityY,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            lifespan: 30 + Math.random() * 20
+        });
+    }
+}
+
+// Update all particles (decrease lifespan, move position)
+export function updateParticles() {
+    for (let i = 0; i < particles.length; i++) {
+        const particle = particles[i];
+        
+        // Update position
+        particle.x += particle.velocityX;
+        particle.y += particle.velocityY;
+        
+        // Decrease lifespan
+        particle.lifespan--;
+        
+        // Remove dead particles
+        if (particle.lifespan <= 0) {
+            particles.splice(i, 1);
+            i--;
+        }
+    }
+}
+
+// Draw all particles
+export function drawParticles() {
+    ctx.save();
+    for (const particle of particles) {
+        // Calculate opacity based on remaining lifespan
+        const opacity = particle.lifespan / 50;
+        
+        // Set fill style with opacity
+        ctx.fillStyle = particle.color;
+        ctx.globalAlpha = opacity;
+        
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Add glow effect
+        ctx.shadowColor = particle.color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+    }
+    ctx.restore();
 }
 
 // Decrease bullet cooldown timer

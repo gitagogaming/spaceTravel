@@ -41,14 +41,24 @@ class BulletManager {
     drawBullets() {
         this.ctx.save();
         for (let bullet of this.bullets) {
-            this.ctx.fillStyle = bullet.color;
+            // Create a radial gradient for glow effect
+            const gradient = this.ctx.createRadialGradient(
+                bullet.x, bullet.y, 0,
+                bullet.x, bullet.y, bullet.size * 2
+            );
+            gradient.addColorStop(0, bullet.color);
+            gradient.addColorStop(1, 'rgba(255, 149, 0, 0)');
+            
+            // Draw glow
+            this.ctx.fillStyle = gradient;
             this.ctx.beginPath();
-            this.ctx.arc(bullet.x, bullet.y, bullet.size, 0, Math.PI * 2);
+            this.ctx.arc(bullet.x, bullet.y, bullet.size * 2, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Add a glow effect
-            this.ctx.shadowColor = bullet.color;
-            this.ctx.shadowBlur = 10;
+            // Draw bullet
+            this.ctx.fillStyle = 'white';
+            this.ctx.beginPath();
+            this.ctx.arc(bullet.x, bullet.y, bullet.size, 0, Math.PI * 2);
             this.ctx.fill();
         }
         this.ctx.restore();
@@ -61,26 +71,18 @@ class BulletManager {
             for (let j = 0; j < asteroids.length; j++) {
                 const asteroid = asteroids[j];
                 
-                // Simple collision detection between bullet and asteroid
-                const bulletRect = {
-                    left: bullet.x - bullet.size,
-                    right: bullet.x + bullet.size,
-                    top: bullet.y - bullet.size,
-                    bottom: bullet.y + bullet.size
-                };
+                // Improved collision detection using distance calculation
+                const asteroidCenterX = asteroid.x + asteroid.width / 2;
+                const asteroidCenterY = asteroid.y + asteroid.height / 2;
                 
-                const asteroidRect = {
-                    left: asteroid.x,
-                    right: asteroid.x + asteroid.width,
-                    top: asteroid.y,
-                    bottom: asteroid.y + asteroid.height
-                };
+                // Calculate distance between bullet and asteroid center
+                const distX = bullet.x - asteroidCenterX;
+                const distY = bullet.y - asteroidCenterY;
+                const distance = Math.sqrt(distX * distX + distY * distY);
                 
-                if (!(bulletRect.right < asteroidRect.left ||
-                    bulletRect.left > asteroidRect.right ||
-                    bulletRect.bottom < asteroidRect.top ||
-                    bulletRect.top > asteroidRect.bottom)) {
-                    
+                // Consider collision if the distance is less than bullet size + average asteroid radius
+                const asteroidRadius = (asteroid.width + asteroid.height) / 4;
+                if (distance < bullet.size + asteroidRadius) {
                     // Call the callback function with the indexes
                     onCollision(i, j);
                     return; // Exit after finding first collision
