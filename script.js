@@ -1,12 +1,17 @@
 /* @Author: Nirajan Shrestha
    July 27,2024 
 */
-import { startDistanceScore, asteroids, shipRectUpdate, canvas, ctx, antiMatterManager, asteroidManager } from './gameState.js';
+import { startDistanceScore, asteroids, shipRectUpdate, canvas, ctx, antiMatterManager, asteroidManager, bulletManager, bulletCooldown, maxBulletCooldown, updateBulletCooldown, handleBulletAsteroidCollision } from './gameState.js';
 // import { createAsteroid, updateAsteroids, drawAsteroid } from './asteroids.js';
 import { addStar, drawStars } from './createStars.js';
 import { mobileControls } from './mobileControls.js';
 import { desktopControls } from './desktopControls.js';
 
+
+// try and follow guide and create a single 'game class' where eevryhing is initiated at... 
+// https://www.youtube.com/watch?v=7BHs1BzA4fs&t=1141s
+/////
+// make asteroid speed and antimatter change based on time travelled... and also * multipler mabye for antimater collected?
 
 /* Required HTML elemnts */
 const container = document.getElementById("game-space");
@@ -15,12 +20,9 @@ const distanceValueContainer = document.getElementById("travel");
 const antiMatterElement = document.getElementById("antiMatter");
 const shipSpeedElement = document.getElementById("shipSpeed");
 
-
-
 function crosshairCursor(){
     document.body.style.cursor = 'crosshair';
 }
-
 
 //Calls startGame method when page is loaded
 window.addEventListener("DOMContentLoaded", startGame)
@@ -37,10 +39,10 @@ function startGame(){
     })
 }
 
-
 function isMobileDevice() {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|webOS|Windows Phone/i.test(navigator.userAgent);
 }
+
 /**
  * This method starts the game when playButton is clicked, sets the game-space display  to block to display the game screen
  * and dispalys the the value, spaceship, and antimatteer, hides the info screen and 
@@ -59,6 +61,15 @@ function playGame(){
         asteroidManager.createAsteroid();
         antiMatterManager.createAntiMatterElement();
         startDistanceScore();
+        
+        // Add event listener for shooting
+        canvas.addEventListener('click', handleShoot);
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                handleShoot();
+            }
+        });
+        
         gameLoop();
    
         if (isMobileDevice()) {
@@ -71,12 +82,28 @@ function playGame(){
     })  
 }
 
-
+function handleShoot() {
+    if (bulletCooldown <= 0) {
+        bulletManager.createBullet();
+        bulletCooldown = maxBulletCooldown;
+    }
+}
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     shipRectUpdate();
     drawStars();
+    
+    // Update bullet cooldown
+    updateBulletCooldown();
+    
+    // Update and draw bullets
+    bulletManager.updateBullets();
+    bulletManager.drawBullets();
+    
+    // Check for bullet-asteroid collisions
+    bulletManager.checkBulletAsteroidCollision(asteroids, handleBulletAsteroidCollision);
+    
     asteroidManager.updateAsteroids();
     asteroids.forEach(asteroidManager.drawAsteroid);
     antiMatterManager.drawAntiMatter();

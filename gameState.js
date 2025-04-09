@@ -1,6 +1,6 @@
 import AntiMatterManager from './antimatter.js';
 import AsteroidManager from './asteroids.js';
-
+import BulletManager from './bullet.js';
 
 // Keeping all of the main game data in one place so other classes/files can access easily
 const score = document.getElementById("distance");
@@ -29,19 +29,21 @@ export let fuelInterval;
 // Can do some sort of powerup to speed up ship as well or slowdown asteroids while speeding up ship etc..
 export let antiMatterElements = [];   // Array to store all the antimatter elements
 export let defaultAntiMatterFallSpeed = 0.6; // Adjusted dynamically based on user input using the "W" and "S" keys
-export let antiMatterSpawnRate = 500; // Adjust this value to control the spawn rate - LOWER = FASTER SPAWN
+export let antiMatterSpawnRate = 3000; // Adjust this value to control the spawn rate - LOWER = FASTER SPAWN
 export let shipMovementSpeed = 2;    // Adjusted dynamically based on user input using the "W" and "S" keys
 
 export let asteroids = [];           // Array to store all the asteroids
 export let defaultAsteroidFallSpeed = 0.6;  // Current Adjusted dynamically based on user input with keys, could be based on total antimatter collected or distance travelled
-export let asteroidSpawnRate = 100;  // Adjust this value to control the spawn rate - LOWER = FASTER SPAWN
+export let asteroidSpawnRate = 400;  // Adjust this value to control the spawn rate - LOWER = FASTER SPAWN
 
-
+export let bullets = [];             // Array to store all bullets
+export let bulletCooldown = 0;       // Cooldown timer for shooting
+export const maxBulletCooldown = 20; // Maximum cooldown time between shots
 
 // Managers for the antimatter and asteroids
 export const antiMatterManager = new AntiMatterManager();
 export const asteroidManager = new AsteroidManager();
-
+export const bulletManager = new BulletManager();
 
 export function shipRectUpdate(){
     shipRect = spaceShip.getBoundingClientRect();
@@ -179,4 +181,22 @@ export function decreaseGameSpeed(){
 
     asteroidManager.updateFallSpeed(defaultAsteroidFallSpeed);
     antiMatterManager.updateFallSpeed(defaultAntiMatterFallSpeed);
+}
+
+// Handle bullet-asteroid collision
+export function handleBulletAsteroidCollision(bulletIndex, asteroidIndex) {
+    // Remove the bullet and asteroid that collided
+    bullets.splice(bulletIndex, 1);
+    asteroids.splice(asteroidIndex, 1);
+    
+    // Add points for destroying an asteroid
+    matterValue += 5;
+    anitMatterScore.innerHTML = matterValue;
+}
+
+// Decrease bullet cooldown timer
+export function updateBulletCooldown() {
+    if (bulletCooldown > 0) {
+        bulletCooldown--;
+    }
 }
