@@ -58,6 +58,14 @@ export const antiMatterManager = new AntiMatterManager();
 export const asteroidManager = new AsteroidManager();
 export const bulletManager = new BulletManager();
 
+// Debug state
+export let debugMode = false;
+export function toggleDebugMode() {
+    debugMode = !debugMode;
+    console.log(`Global debug mode: ${debugMode ? 'ON' : 'OFF'}`);
+    return debugMode;
+}
+
 export function shipRectUpdate(){
     shipRect = spaceShip.getBoundingClientRect();
 }
@@ -519,3 +527,4 @@ export function drawAimingLine() {
     ctx.fill();
     ctx.restore();
 }
+

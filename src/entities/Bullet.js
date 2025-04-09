@@ -10,10 +10,17 @@ class BulletManager {
         this.ctx = GameState.ctx;
         this.mousePosition = { x: 0, y: 0 };
         this.maxFiringAngle = 60; // 60 degrees on each side = 120 degrees total
+        this.renderMode = 2;   // cant decide if render mode has any effect on bullets...
     }
 
     updateMousePosition(x, y) {
         this.mousePosition = { x, y };
+    }
+
+    cycleRenderMode() {
+        this.renderMode = (this.renderMode + 1) % 3;
+        console.log(`Bullet render mode: ${this.renderMode}`);
+        return this.renderMode;
     }
 
     createBullet() {
@@ -113,25 +120,27 @@ class BulletManager {
 
     drawBullets() {
         this.ctx.save();
-                
+        
+        // Set composite operation to ensure bullets appear on top
+        if (this.renderMode === 1) {
+            this.ctx.globalCompositeOperation = 'source-over';
+        } else if (this.renderMode === 2) {
+            this.ctx.globalCompositeOperation = 'lighter';
+        }
+        
         for (let bullet of this.bullets) {
-            
-            // extra glow when in a powerup mode??
-            // maybe we change colors based on powerup?
+            if (GameState.debugMode) {
+                // Draw debug box around bullet
+                this.ctx.strokeStyle = 'red';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeRect(
+                    bullet.x - bullet.size * 2, 
+                    bullet.y - bullet.size * 2,
+                    bullet.size * 4,
+                    bullet.size * 4
+                );
+            }
 
-            // // Draw larger outer glow first
-            // const outerGlow = this.ctx.createRadialGradient(
-            //     bullet.x, bullet.y, 0,
-            //     bullet.x, bullet.y, bullet.size * 3
-            // );
-            // outerGlow.addColorStop(0, 'rgba(255, 149, 0, 0.7)');
-            // outerGlow.addColorStop(1, 'rgba(255, 149, 0, 0)');
-            
-            // this.ctx.fillStyle = outerGlow;
-            // this.ctx.beginPath();
-            // this.ctx.arc(bullet.x, bullet.y, bullet.size * 3, 0, Math.PI * 2);
-            // this.ctx.fill();
-            
             // Create a radial gradient for inner glow effect
             const gradient = this.ctx.createRadialGradient(
                 bullet.x, bullet.y, 0,
@@ -151,6 +160,17 @@ class BulletManager {
             this.ctx.beginPath();
             this.ctx.arc(bullet.x, bullet.y, bullet.size, 0, Math.PI * 2);
             this.ctx.fill();
+            
+            if (GameState.debugMode) {
+                // Draw crosshair at bullet center for debugging
+                this.ctx.strokeStyle = 'blue';
+                this.ctx.beginPath();
+                this.ctx.moveTo(bullet.x - 5, bullet.y);
+                this.ctx.lineTo(bullet.x + 5, bullet.y);
+                this.ctx.moveTo(bullet.x, bullet.y - 5);
+                this.ctx.lineTo(bullet.x, bullet.y + 5);
+                this.ctx.stroke();
+            }
         }
         this.ctx.restore();
     }

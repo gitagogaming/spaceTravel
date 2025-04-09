@@ -77,6 +77,38 @@ class AntiMatterManager {
                 continue;
             }
             
+            // Draw debug visuals if debug mode is on
+            if (GameState.debugMode) {
+                // Draw bounding box
+                this.ctx.strokeStyle = 'lime';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(
+                    element.x,
+                    element.y,
+                    element.width,
+                    element.height
+                );
+                
+                // Draw center point
+                this.ctx.fillStyle = 'lime';
+                this.ctx.beginPath();
+                this.ctx.arc(
+                    element.x + element.width / 2,
+                    element.y + element.height / 2,
+                    4, 0, Math.PI * 2
+                );
+                this.ctx.fill();
+                
+                // Draw clickable area indicator
+                this.ctx.fillStyle = 'rgba(0, 255, 0, 0.2)';
+                this.ctx.fillRect(
+                    element.x,
+                    element.y,
+                    element.width,
+                    element.height
+                );
+            }
+            
             // Draw antimatter SVG
             this.ctx.drawImage(
                 this.antiMatterImage,
@@ -85,7 +117,6 @@ class AntiMatterManager {
                 element.width,
                 element.height
             );
-            
         }
         
         this.ctx.restore();

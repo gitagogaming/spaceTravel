@@ -1,4 +1,5 @@
-import { shipMovementSpeed, increaseShipSpeed, decreaseShipSpeed, increaseGameSpeed, decreaseGameSpeed } from '../game/GameState.js';
+import { toggleDebugMode, bulletManager, shipMovementSpeed, increaseShipSpeed, decreaseShipSpeed, increaseGameSpeed, decreaseGameSpeed } from '../game/GameState.js';
+
 
 export function desktopControls() {
     const spaceShip = document.getElementById("spaceShip");
@@ -38,6 +39,19 @@ export function desktopControls() {
             isLeftKeyPressed = false;
         } else if (e.key === 'ArrowRight' || e.key === 'd') {
             isRightKeyPressed = false;
+        }
+    });
+
+
+    document.addEventListener('keydown', (event) => {
+        // Toggle bullet debug mode with ' Shift+B' key
+        if (event.shiftKey && (event.key === 'b' || event.key === 'B')) {
+            toggleDebugMode();
+        }
+
+        // Cycle through bullet rendering modes with 'R' key
+        if (event.key === 'r' || event.key === 'R') {
+            bulletManager.cycleRenderMode();
         }
     });
 
@@ -91,5 +105,8 @@ export function desktopControls() {
     
     updateShipPosition();
 }
+
+
+
 
 export default desktopControls;

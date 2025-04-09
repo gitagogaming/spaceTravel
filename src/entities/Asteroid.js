@@ -45,6 +45,40 @@ class AsteroidManager {
         // Save the current canvas state
         this.ctx.save();
         
+        // Debug visualization before any transformations
+        if (GameState.debugMode) {
+            // Draw bounding box in original position
+            this.ctx.strokeStyle = 'yellow';
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(
+                asteroid.x,
+                asteroid.y,
+                asteroid.width,
+                asteroid.height
+            );
+            
+            // Draw center point
+            this.ctx.fillStyle = 'yellow';
+            this.ctx.beginPath();
+            this.ctx.arc(
+                asteroid.x + asteroid.width/2, 
+                asteroid.y + asteroid.height/2, 
+                3, 0, Math.PI * 2
+            );
+            this.ctx.fill();
+            
+            // Show collision radius
+            this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)';
+            this.ctx.beginPath();
+            this.ctx.arc(
+                asteroid.x + asteroid.width/2,
+                asteroid.y + asteroid.height/2,
+                (asteroid.width + asteroid.height)/4, // Average radius used in collision detection
+                0, Math.PI * 2
+            );
+            this.ctx.stroke();
+        }
+        
         // Translate to the asteroid's center position
         this.ctx.translate(asteroid.x + asteroid.width / 2, asteroid.y + asteroid.height / 2);
         
@@ -64,6 +98,24 @@ class AsteroidManager {
             asteroid.width,
             asteroid.height
         );
+        
+        if (GameState.debugMode) {
+            // Draw rotated bounding box
+            this.ctx.strokeStyle = 'red';
+            this.ctx.lineWidth = 1;
+            this.ctx.strokeRect(
+                -asteroid.width / 2,
+                -asteroid.height / 2,
+                asteroid.width,
+                asteroid.height
+            );
+            
+            // Draw center point in rotated space
+            this.ctx.fillStyle = 'red';
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 5, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
         
         // Restore the canvas state
         this.ctx.restore();
