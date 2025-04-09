@@ -1,0 +1,82 @@
+                    <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <!-- Main asteroid surface gradient -->
+                            <linearGradient id="asteroidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#5a4f4f;stop-opacity:1" />
+                                <stop offset="40%" style="stop-color:#3d3535;stop-opacity:1" />
+                                <stop offset="60%" style="stop-color:#2c2626;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1a1717;stop-opacity:1" />
+                            </linearGradient>
+                            
+                            <!-- Crater gradient -->
+                            <radialGradient id="craterGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                <stop offset="0%" style="stop-color:#2a2424;stop-opacity:1" />
+                                <stop offset="70%" style="stop-color:#1a1717;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#111010;stop-opacity:1" />
+                            </radialGradient>
+                            
+                            <!-- Highlight for some illumination -->
+                            <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#888888;stop-opacity:0.7" />
+                                <stop offset="100%" style="stop-color:#666666;stop-opacity:0" />
+                            </linearGradient>
+                            
+                            <!-- Mineral vein gradient -->
+                            <linearGradient id="mineralGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#a06b2d;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#daa520;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#a06b2d;stop-opacity:1" />
+                            </linearGradient>
+                            
+                            <!-- Filter for the asteroid shadow -->
+                            <filter id="shadowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+                                <feOffset in="blur" dx="3" dy="3" result="offsetBlur" />
+                                <feComposite in="SourceGraphic" in2="offsetBlur" operator="over" />
+                            </filter>
+                        </defs>
+                        
+                        <!-- Asteroid Shadow -->
+                        <ellipse cx="52" cy="52" rx="36" ry="34" fill="#000000" opacity="0.3" filter="url(#shadowFilter)" />
+                        
+                        <!-- Main Asteroid Body - Irregular Shape -->
+                        <path d="M50,15 
+                                 C60,15 67,20 72,30 
+                                 S80,45 78,55 
+                                 S70,70 60,75 
+                                 S40,80 30,70 
+                                 S15,50 18,40 
+                                 S25,20 35,15 
+                                 S45,15 50,15 Z" 
+                              fill="url(#asteroidGradient)" 
+                              stroke="#444444" 
+                              stroke-width="1" />
+                        
+                        <!-- Surface Details and Craters -->
+                        <!-- Large Crater -->
+                        <ellipse cx="55" cy="40" rx="12" ry="10" fill="url(#craterGradient)" transform="rotate(-15 55 40)" />
+                        <ellipse cx="55" cy="40" rx="8" ry="6" fill="#1c1818" transform="rotate(-15 55 40)" />
+                        
+                        <!-- Small Craters -->
+                        <circle cx="33" cy="30" r="5" fill="url(#craterGradient)" />
+                        <circle cx="33" cy="30" r="3" fill="#1c1818" />
+                        
+                        <circle cx="65" cy="65" r="7" fill="url(#craterGradient)" />
+                        <circle cx="65" cy="65" r="4" fill="#1c1818" />
+                        
+                        <circle cx="40" cy="60" r="4" fill="url(#craterGradient)" />
+                        <circle cx="40" cy="60" r="2" fill="#1c1818" />
+                        
+                        <!-- Surface Ridges -->
+                        <path d="M35,25 Q45,35 60,30" fill="none" stroke="#444444" stroke-width="1.5" />
+                        <path d="M25,45 Q40,55 60,50" fill="none" stroke="#444444" stroke-width="1.5" />
+                        <path d="M40,70 Q50,65 65,70" fill="none" stroke="#444444" stroke-width="1.5" />
+                        
+                        <!-- Mineral Veins -->
+                        <path d="M30,35 Q40,45 50,40" fill="none" stroke="url(#mineralGradient)" stroke-width="1.5" />
+                        <path d="M55,60 Q65,55 72,45" fill="none" stroke="url(#mineralGradient)" stroke-width="1.5" />
+                        
+                        <!-- Surface Highlights -->
+                        <path d="M30,20 Q45,28 35,40" fill="url(#highlightGradient)" opacity="0.2" />
+                        <path d="M60,30 Q70,45 65,55" fill="url(#highlightGradient)" opacity="0.2" />
+                    </svg>

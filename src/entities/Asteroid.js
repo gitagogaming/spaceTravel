@@ -41,28 +41,30 @@ class AsteroidManager {
     }
 
     drawAsteroid = (asteroid) => {
+        // Save the current canvas state
         this.ctx.save();
+        
+        // Translate to the asteroid's center position
         this.ctx.translate(asteroid.x + asteroid.width / 2, asteroid.y + asteroid.height / 2);
+        
+        // Apply rotation
         this.ctx.rotate(asteroid.rotation);
-
-        const gradient = this.ctx.createLinearGradient(-asteroid.width / 2, -asteroid.height / 2, asteroid.width / 2, asteroid.height / 2);
-        gradient.addColorStop(0, '#555');
-        gradient.addColorStop(1, '#333');
-
-        this.ctx.fillStyle = gradient;
-        this.ctx.beginPath();
-        this.ctx.moveTo(-asteroid.width / 2 + asteroid.radius1, -asteroid.height / 2);
-        this.ctx.lineTo(asteroid.width / 2 - asteroid.radius1, -asteroid.height / 2);
-        this.ctx.quadraticCurveTo(asteroid.width / 2, -asteroid.height / 2, asteroid.width / 2, -asteroid.height / 2 + asteroid.radius1);
-        this.ctx.lineTo(asteroid.width / 2, asteroid.height / 2 - asteroid.radius2);
-        this.ctx.quadraticCurveTo(asteroid.width / 2, asteroid.height / 2, asteroid.width / 2 - asteroid.radius2, asteroid.height / 2);
-        this.ctx.lineTo(-asteroid.width / 2 + asteroid.radius2, asteroid.height / 2);
-        this.ctx.quadraticCurveTo(-asteroid.width / 2, asteroid.height / 2, -asteroid.width / 2, asteroid.height / 2 - asteroid.radius2);
-        this.ctx.lineTo(-asteroid.width / 2, -asteroid.height / 2 + asteroid.radius1);
-        this.ctx.quadraticCurveTo(-asteroid.width / 2, -asteroid.height / 2, -asteroid.width / 2 + asteroid.radius1, -asteroid.height / 2);
-
-        this.ctx.closePath();
-        this.ctx.fill();
+        
+        // Create an image object for the SVG
+        const asteroidImage = new Image();
+        asteroidImage.src = "asteroid.svg"; // Path to your SVG file
+        
+        // Draw the image centered at the asteroid's position
+        // The -asteroid.width/2 and -asteroid.height/2 ensure it's centered
+        this.ctx.drawImage(
+            asteroidImage,
+            -asteroid.width / 2,
+            -asteroid.height / 2,
+            asteroid.width,
+            asteroid.height
+        );
+        
+        // Restore the canvas state
         this.ctx.restore();
     }
 
