@@ -127,10 +127,10 @@ p, li, ul{
 
 
 /* asteroid and fuel */
-.asteroid{
+/* .asteroid{
   position: absolute;
   top: 0;
-}
+} */
 
 .fuel{
   position: absolute;
@@ -294,6 +294,8 @@ p, li, ul{
 
 
 
+/* New How to play screen  */
+
 /* Base styles */
 body {
   background-color: #0a0a1a;
@@ -320,7 +322,7 @@ body {
   font-family: 'Orbitron', sans-serif;
   text-align: center;
   color: #00ddff;
-  text-shadow: 0 0 10px rgba(0, 200, 255, 0.7);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
   margin-top: 10px;
   letter-spacing: 2px;
   font-size: 28px;
@@ -412,23 +414,7 @@ body {
   color: #00ddff;
 }
 
-/* Start button */
-/* .play-button {
-  background: linear-gradient(135deg, #0066ff 0%, #00ddff 100%);
-  color: white;
-  font-family: 'Space Mono', monospace;
-  font-weight: bold;
-  border: none;
-  border-radius: 30px;
-  padding: 12px 40px;
-  font-size: 18px;
-  margin: 20px auto;
-  display: block;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 5px 15px rgba(0, 150, 255, 0.4);
-  letter-spacing: 1px;
-} */
+
 
 .play-button:hover {
   transform: scale(1.05);
@@ -439,13 +425,15 @@ body {
   transform: scale(0.95);
 }
 
-/* Media queries for responsiveness */
-@media (max-width: 768px) {
-  .game-elements {
-    flex-direction: column;
-  }
-  
-  .game-element {
-    margin-bottom: 15px;
-  }
-}
+
+
+
+
+
+
+
+
+
+
+
+
