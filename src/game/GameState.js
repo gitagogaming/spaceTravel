@@ -305,9 +305,27 @@ export function createPowerUp() {
     const powerUpX = Math.random() * (canvas.width - 30) + 15;
     const powerUpY = -30; // Start above the screen
     
-    // Randomly select a powerup type
-    const powerUpTypes = ['angleShooting', 'multiShot'];
-    const powerUpType = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+    // Define power-up types with weights (higher number = more common)
+    const powerUpTypes = [
+        { type: 'multiShot', weight: 70 },       // 70% chance
+        { type: 'angleShooting', weight: 30 }    // 30% chance
+    ];
+    
+    // Calculate total weight
+    const totalWeight = powerUpTypes.reduce((sum, powerUp) => sum + powerUp.weight, 0);
+    
+    // Pick a random number between 0 and total weight
+    let random = Math.random() * totalWeight;
+    
+    // Find the power-up based on weight distribution
+    let selectedType = powerUpTypes[0].type;
+    for (const powerUp of powerUpTypes) {
+        if (random < powerUp.weight) {
+            selectedType = powerUp.type;
+            break;
+        }
+        random -= powerUp.weight;
+    }
     
     powerUps.push({
         x: powerUpX,
@@ -315,7 +333,7 @@ export function createPowerUp() {
         width: 30,
         height: 30,
         speed: defaultAsteroidFallSpeed * 0.8, // Slightly slower than asteroids
-        type: powerUpType
+        type: selectedType,
     });
 }
 
