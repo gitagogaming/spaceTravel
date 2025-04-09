@@ -113,22 +113,40 @@ class BulletManager {
 
     drawBullets() {
         this.ctx.save();
+                
         for (let bullet of this.bullets) {
-            // Create a radial gradient for glow effect
+            
+            // extra glow when in a powerup mode??
+            // maybe we change colors based on powerup?
+
+            // // Draw larger outer glow first
+            // const outerGlow = this.ctx.createRadialGradient(
+            //     bullet.x, bullet.y, 0,
+            //     bullet.x, bullet.y, bullet.size * 3
+            // );
+            // outerGlow.addColorStop(0, 'rgba(255, 149, 0, 0.7)');
+            // outerGlow.addColorStop(1, 'rgba(255, 149, 0, 0)');
+            
+            // this.ctx.fillStyle = outerGlow;
+            // this.ctx.beginPath();
+            // this.ctx.arc(bullet.x, bullet.y, bullet.size * 3, 0, Math.PI * 2);
+            // this.ctx.fill();
+            
+            // Create a radial gradient for inner glow effect
             const gradient = this.ctx.createRadialGradient(
                 bullet.x, bullet.y, 0,
                 bullet.x, bullet.y, bullet.size * 2
             );
             gradient.addColorStop(0, bullet.color);
-            gradient.addColorStop(1, 'rgba(255, 149, 0, 0)');
+            gradient.addColorStop(1, 'rgba(255, 149, 0, 0.3)');
             
-            // Draw glow
+            // Draw inner glow
             this.ctx.fillStyle = gradient;
             this.ctx.beginPath();
             this.ctx.arc(bullet.x, bullet.y, bullet.size * 2, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Draw bullet
+            // Draw bullet core
             this.ctx.fillStyle = 'white';
             this.ctx.beginPath();
             this.ctx.arc(bullet.x, bullet.y, bullet.size, 0, Math.PI * 2);
