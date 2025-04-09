@@ -1,0 +1,95 @@
+<svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Core energy gradient -->
+        <radialGradient id="antimatterCore" cx="50%" cy="50%" r="50%" fx="40%" fy="40%">
+            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+            <stop offset="30%" style="stop-color:#e066ff;stop-opacity:0.9" />
+            <stop offset="70%" style="stop-color:#8a2be2;stop-opacity:0.7" />
+            <stop offset="100%" style="stop-color:#4b0082;stop-opacity:0.5" />
+        </radialGradient>
+        
+        <!-- Outer glow -->
+        <radialGradient id="antimatterGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" style="stop-color:#9400d3;stop-opacity:0.4" />
+            <stop offset="100%" style="stop-color:#4b0082;stop-opacity:0" />
+        </radialGradient>
+        
+        <!-- Energy particles gradient -->
+        <linearGradient id="particleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ba55d3;stop-opacity:0.7" />
+        </linearGradient>
+        
+        <!-- Pulsing effect filter -->
+        <filter id="pulseGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+            <feColorMatrix in="blur" type="matrix" values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 3 0" result="glow" />
+            <feMerge>
+                <feMergeNode in="glow" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+        
+        <!-- Swirling effect -->
+        <filter id="turbulence" x="0" y="0" width="100%" height="100%">
+            <feTurbulence baseFrequency="0.05" numOctaves="2" seed="5" />
+            <feDisplacementMap in="SourceGraphic" scale="5" />
+        </filter>
+    </defs>
+    
+    <!-- Background energy field -->
+    <circle cx="50" cy="50" r="40" fill="url(#antimatterGlow)" opacity="0.7">
+        <animate attributeName="r" values="40;43;40" dur="4s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Swirling energy field -->
+    <g filter="url(#turbulence)">
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#9932cc" stroke-width="0.5" opacity="0.5" />
+        <circle cx="50" cy="50" r="25" fill="none" stroke="#9370db" stroke-width="0.5" opacity="0.5" />
+        <circle cx="50" cy="50" r="20" fill="none" stroke="#8a2be2" stroke-width="0.5" opacity="0.5" />
+    </g>
+    
+    <!-- Core energy ball -->
+    <circle cx="50" cy="50" r="15" fill="url(#antimatterCore)" filter="url(#pulseGlow)">
+        <animate attributeName="r" values="15;17;15" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.9;1;0.9" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Energy particles -->
+    <!-- Orbiting particles -->
+    <g>
+        <circle cx="50" cy="20" r="2" fill="url(#particleGradient)" filter="url(#pulseGlow)">
+            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="4s" repeatCount="indefinite" />
+            <animate attributeName="r" values="2;3;2" dur="2s" repeatCount="indefinite" />
+        </circle>
+        
+        <circle cx="75" cy="50" r="2.5" fill="url(#particleGradient)" filter="url(#pulseGlow)">
+            <animateTransform attributeName="transform" type="rotate" from="90 50 50" to="450 50 50" dur="6s" repeatCount="indefinite" />
+            <animate attributeName="r" values="2.5;3.5;2.5" dur="3s" repeatCount="indefinite" />
+        </circle>
+        
+        <circle cx="35" cy="75" r="2" fill="url(#particleGradient)" filter="url(#pulseGlow)">
+            <animateTransform attributeName="transform" type="rotate" from="180 50 50" to="540 50 50" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="r" values="2;2.8;2" dur="2.5s" repeatCount="indefinite" />
+        </circle>
+    </g>
+    
+    <!-- Random energy sparks -->
+    <g>
+        <path d="M50,50 L58,45 L60,38 L55,42" fill="url(#particleGradient)" opacity="0.7">
+            <animate attributeName="opacity" values="0.7;0.9;0.7" dur="1s" repeatCount="indefinite" />
+        </path>
+        
+        <path d="M50,50 L40,48 L32,45 L38,52" fill="url(#particleGradient)" opacity="0.7">
+            <animate attributeName="opacity" values="0.7;0.9;0.7" dur="1.3s" repeatCount="indefinite" />
+        </path>
+        
+        <path d="M50,50 L53,60 L50,65 L47,58" fill="url(#particleGradient)" opacity="0.7">
+            <animate attributeName="opacity" values="0.7;0.9;0.7" dur="0.8s" repeatCount="indefinite" />
+        </path>
+    </g>
+</svg>

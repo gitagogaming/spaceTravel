@@ -55,6 +55,12 @@ class AntiMatterManager {
     drawAntiMatter() {
         this.ctx.save();
         
+        // Create antimatter image object if it doesn't exist yet
+        if (!this.antiMatterImage) {
+            this.antiMatterImage = new Image();
+            this.antiMatterImage.src = "antimatter.svg";
+        }
+        
         // Update position and remove collected antimatter
         for (let i = 0; i < this.antiMatterElements.length; i++) {
             const element = this.antiMatterElements[i];
@@ -69,22 +75,15 @@ class AntiMatterManager {
                 continue;
             }
             
-            // Draw antimatter
-            this.ctx.fillStyle = 'green';
-            this.ctx.beginPath();
-            this.ctx.arc(
-                element.x + element.width / 2,
-                element.y + element.height / 2,
-                element.width / 2,
-                0,
-                Math.PI * 2
+            // Draw antimatter SVG
+            this.ctx.drawImage(
+                this.antiMatterImage,
+                element.x,
+                element.y,
+                element.width,
+                element.height
             );
-            this.ctx.fill();
             
-            // Add glow effect
-            this.ctx.shadowColor = 'lightgreen';
-            this.ctx.shadowBlur = 10;
-            this.ctx.fill();
         }
         
         this.ctx.restore();
