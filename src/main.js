@@ -93,6 +93,12 @@ function handleMouseMove(event) {
 function handleShoot() {
     if (GameState.bulletCooldown <= 0) {
         GameState.bulletManager.createBullet();
-        GameState.bulletCooldown = GameState.maxBulletCooldown;
+
+
+        // We could add in an ammo system... 
+
+        // stopping spammming of bullets
+        GameState.setBulletCooldown(GameState.maxBulletCooldown / 2);
+
     }
 }

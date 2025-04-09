@@ -290,6 +290,10 @@ export function drawParticles() {
     ctx.restore();
 }
 
+export function setBulletCooldown(value) {
+    bulletCooldown = value;
+}
+
 // Decrease bullet cooldown timer
 export function updateBulletCooldown() {
     if (bulletCooldown > 0) {
