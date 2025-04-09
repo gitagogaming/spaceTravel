@@ -1,4 +1,4 @@
-import { canvas, ctx } from '../game/GameState.js';
+import { canvas, ctx, shipMovementSpeed } from '../game/GameState.js';
 
 // Array to store star data
 const stars = [];
@@ -27,7 +27,7 @@ export function drawStars() {
     
     stars.forEach(star => {
         // Update position
-        star.y += star.speed;
+        star.y += star.speed * (shipMovementSpeed/1.5);
         
         // If star reaches bottom, reset to top
         if (star.y > canvas.height) {
