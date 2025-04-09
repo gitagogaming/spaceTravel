@@ -17,8 +17,8 @@ class AsteroidManager {
         if (GameState.isGameOver) return;
 
         setInterval(() => {
-            let randomRockHeight = Math.random() * 5 + 30;
-            let randomRockWidth = Math.random() * 5 + 30;
+            let randomRockHeight = Math.random() * 5 + 50;
+            let randomRockWidth = Math.random() * 5 + 50;
             let randomRockRadius1 = Math.floor(Math.random() * 3) + 6;
             let randomRockRadius2 = Math.floor(Math.random() * 6) + 3;
             let x = Math.random() * this.canvas.width;
