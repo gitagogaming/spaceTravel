@@ -7,6 +7,9 @@ class AntiMatterManager {
         this.spawnRate = GameState.antiMatterSpawnRate;
         this.canvas = GameState.canvas;
         this.ctx = GameState.ctx;
+
+        this.antiMatterImage = new Image();
+        this.antiMatterImage.src = "antimatter.svg";
     }
 
     updateFallSpeed(newSpeed) {
@@ -58,10 +61,10 @@ class AntiMatterManager {
         this.ctx.save();
         
         // Create antimatter image object if it doesn't exist yet
-        if (!this.antiMatterImage) {
-            this.antiMatterImage = new Image();
-            this.antiMatterImage.src = "antimatter.svg";
-        }
+        // if (!this.antiMatterImage) {
+        //     this.antiMatterImage = new Image();
+        //     this.antiMatterImage.src = "antimatter.svg";
+        // }
         
         // Update position and remove collected antimatter
         for (let i = 0; i < this.antiMatterElements.length; i++) {

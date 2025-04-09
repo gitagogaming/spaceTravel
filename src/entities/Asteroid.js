@@ -7,6 +7,9 @@ class AsteroidManager {
         this.asteroidSpawnRate = GameState.asteroidSpawnRate;
         this.canvas = GameState.canvas;
         this.ctx = GameState.ctx;
+
+        this.asteroidImage = new Image();
+        this.asteroidImage.src = "/asteroid.svg"; 
     }
     
     updateFallSpeed(newSpeed) {
@@ -85,14 +88,12 @@ class AsteroidManager {
         // Apply rotation
         this.ctx.rotate(asteroid.rotation);
         
-        // Create an image object for the SVG
-        const asteroidImage = new Image();
-        asteroidImage.src = "asteroid.svg"; // Path to your SVG file
+
         
         // Draw the image centered at the asteroid's position
         // The -asteroid.width/2 and -asteroid.height/2 ensure it's centered
         this.ctx.drawImage(
-            asteroidImage,
+            this.asteroidImage,
             -asteroid.width / 2,
             -asteroid.height / 2,
             asteroid.width,
