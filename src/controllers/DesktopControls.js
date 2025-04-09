@@ -36,6 +36,37 @@ export function desktopControls() {
             isRightKeyPressed = false;
         }
     });
+
+
+    // need to add an 'options' menu to enable this.. 
+    // or maybe some wacky powerup?
+    
+    // mouse listener for movement
+    document.addEventListener('mousemove', (e) => {
+        const rect = spaceShip.getBoundingClientRect();
+        const mouseX = e.clientX - rect.width / 2; // Center the ship on the mouse
+        shipLeft = Math.max(0, Math.min(mouseX, window.innerWidth - rect.width)); // Prevent going off screen
+        spaceShip.style.left = shipLeft + "px";
+    });
+
+
+    // document.addEventListener('mousemove', (e) => {
+    //     const rect = spaceShip.getBoundingClientRect();
+        
+    //     // Center the ship on the mouse horizontally
+    //     const mouseX = e.clientX - rect.width / 2;
+    //     // Center the ship on the mouse vertically
+    //     const mouseY = e.clientY - rect.height / 2;
+        
+    //     // Prevent going off screen horizontally
+    //     shipLeft = Math.max(0, Math.min(mouseX, window.innerWidth - rect.width));
+    //     // Prevent going off screen vertically
+    //     const shipTop = Math.max(0, Math.min(mouseY, window.innerHeight - rect.height));
+        
+    //     // Update ship position
+    //     spaceShip.style.left = shipLeft + "px";
+    //     spaceShip.style.top = shipTop + "px";
+    // });
     
     // Set up animation frame for smooth movement
     function updateShipPosition() {
