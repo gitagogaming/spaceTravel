@@ -1,27 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPACE JOURNEY</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-     <link rel="stylesheet" href="./style.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-     <!-- @Author: Nirajan Shrestha -000934040
+    <title>VOID HORIZON</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <!-- @Author: Nirajan Shrestha -000934040
           July 27, 2024
      -->
 </head>
+
 <body>
+    <script>
+        function toggleCredits() {
+            var credits = document.getElementById('credits');
+            credits.style.display = (credits.style.display === 'none') ? 'block' : 'none';
+        }
+
+    </script>
     <div class="startScreen" id="startScreen">
         <div class="contents">
-            <h1 class="text-light orbitron gameName">SPACETRAVEL</h1>
+            <h1 class="text-light orbitron gameName">Void Horizon</h1>
         </div>
         <button class="startButton btn btn-primary space-mono-bold">PLAY</button>
-        <a href="https://github.com/nirajan128" class="space-mono-regular credit ">@NIRAJAN SHRESTHA 000934040</a>
-        
+        <!-- <a href="https://github.com/nirajan128" class="space-mono-regular credit ">@NIRAJAN SHRESTHA 000934040</a> -->
+
+        <div class="credit text-center">
+            <small>
+                Developed by 
+                <a href="https://github.com/gitproductions">
+                     GitProductions
+                </a>
+
+            </small>
+            <p style="font-size: smaller;">
+                Based on an early concept by 
+                <a href ="https://github.com/nirajan128" target="_blank" >
+                    Nirajan Shrestha
+                </a>
+            </p>
+
+        </div>
+
     </div>
     <div class="full-screen" id="game-space">
-            <canvas id="game-canvas" width="800" height="600"></canvas>
+        <canvas id="game-canvas" width="800" height="600"></canvas>
 
         <div id="spaceShip">
 
@@ -30,7 +57,8 @@
 
 
         <div id="mobileControls" class="d-flex justify-content-between w-100 controls p-1">
-            <button id="leftArrow" class="btn bg-dark text-light shadow-none"><i class="fas fa-arrow-circle-left"></i></button>
+            <button id="leftArrow" class="btn bg-dark text-light shadow-none"><i
+                    class="fas fa-arrow-circle-left"></i></button>
             <button id="rightArrow" class="btn bg-dark text-light"><i class="fas fa-arrow-circle-right"></i></button>
         </div>
 
@@ -39,12 +67,12 @@
     </div>
 
     <div id="gameOver" class="gameOver bg-light">
-        <div class="g-container d-flex justify-content-center flex-column align-items-center bg-light">
+        <div class="g-container d-flex justify-content-center flex-column align-items-center bg-light text-dark">
             <h3 class="orbitron text-danger">Game Over</h3>
             <p class="space-mono-bold" id="scoreDetail"></p>
             <p class="space-mono-bold" id="matterDetail"></p>
-            <p class ="space-mono-bold" id="finalScoreDetail"></p>
-            <p class ="space-mono-bold text-info">Destroying asteroids gives 1 point each!</p>
+            <p class="space-mono-bold" id="finalScoreDetail"></p>
+            <p class="space-mono-bold text-info">Destroying asteroids gives 1 point each!</p>
             <button class="btn btn-success mb-2 startButton" id="restart">Restart</button>
         </div>
     </div>
@@ -61,7 +89,7 @@
             <p class="space-mono-bold text-success" id="antiMatterValue">0</p>
         </div>
     </div>
-    
+
     <div id="shipSpeed">
         <div class="content d-flex flex-row text-light justify-content-between">
             <p class="space-mono-bold">Speed: </p>
@@ -69,54 +97,57 @@
         </div>
     </div>
 
+
     <div id="gameInfo" class="gameInfo">
-        
-        <div class="container d-flex  flex-column justify-content-center align-items-center infoScreen">
-            <h4 class="orbitron text-center p-2">HOW TO PLAY?</h4>
-            <div class="gameElem d-flex flex-column flex-lg-row justify-content-between infoScreen p-3 shadow">
-                
-                <div class="gElem1">
-                    <p class="space-mono-bold">FIGHTER SPACESHIP</p>
+        <h2 class="game-title">HOW TO PLAY?</h2>
 
-                    <img src="spaceship.svg" alt="My Spaceship" width="100" height="100">
-
-
-                </div>
-                
-                <div class="gElem2">
-                    <p class="space-mono-bold">ASTEROID</p>
-                    <img src="asteroid.svg" alt="Asteroid" width="100" height="100">
-
-                </div>
-                <div class="gElem3">
-                    <p class="space-mono-bold">ANTIMATTER</p>
-                    <img src="antimatter.svg" alt="AntiMatter" width="100" height="100">
-                     <!-- <svg width="25" height="25" viewbox="0 0 25 25">
-                        <circle r="25" fill="green"></circle>
-                     </svg> -->
+        <div class="game-elements">
+            <div class="game-element">
+                <p class="element-title">FIGHTER SPACESHIP</p>
+                <div class="svg-container">
+                    <img src="spaceship.svg" alt="Fighter Spaceship" width="70" height="70">
                 </div>
             </div>
-            <div class="info infoScreen p-2 mt-3">
-                <p class="space-mono-bold">Game Instruction:</p>
-                <ul>
-                    <li class="space-mono-regular"><span class="space-mono-bold">Objective: </span> Dodge the asteroids with your spaceship.</li>
-                    <li class="space-mono-regular"><span class="space-mono-bold">Game Over: </span> If an asteroid hits your spaceship, the game is over.</li>
-                    <li class="space-mono-regular"><span class="space-mono-bold">Collect Points: </span>  Click on the antiMatter to collect points.</li>
-                    <li class="space-mono-regular"><span class="space-mono-bold">Controls: </span> Use the left and right buttons to move the spaceship.</li>
-                    <li class="space-mono-regular"><span class="space-mono-bold">Shooting: </span> Click anywhere or press Spacebar to shoot bullets straight up.</li>
-                    <li class="space-mono-regular"><span class="space-mono-bold">PowerUps: </span> Collect blue angle shooting power-ups to aim in any direction, and orange multi-shot power-ups to fire three bullets at once!</li>
-                    <li class="space-mono-regular"><span class="space-mono-bold">Score: </span> Earn 5 points for each asteroid you destroy!</li>
-                </ul>
+
+            <div class="game-element">
+                <p class="element-title">ASTEROID</p>
+                <div class="svg-container">
+                    <img src="asteroid.svg" alt="Asteroid" width="70" height="70">
+                </div>
             </div>
-            <button class="playButton btn btn-primary space-mono-bold mb-3">START</button>
-            
+
+            <div class="game-element">
+                <p class="element-title">ANTIMATTER</p>
+                <div class="svg-container">
+                    <img src="antimatter.svg" alt="Antimatter" width="70" height="70">
+                </div>
+            </div>
         </div>
+
+        <div class="game-instructions">
+            <p class="instructions-title">GAME INSTRUCTIONS:</p>
+            <ul class="instructions-list">
+                <li><span class="key-term">Objective:</span> Dodge the asteroids with your spaceship.</li>
+                <li><span class="key-term">Game Over:</span> If an asteroid hits your spaceship, the game is over.</li>
+                <li><span class="key-term">Collect Points:</span> Click on the antimatter to collect points.</li>
+                <li><span class="key-term">Controls:</span> Use the left and right buttons to move the spaceship.</li>
+                <li><span class="key-term">Shooting:</span> Click anywhere or press Spacebar to shoot bullets straight
+                    up.</li>
+                <li><span class="key-term">PowerUps:</span> Collect blue angle shooting power-ups to aim in any
+                    direction, and orange multi-shot power-ups to fire three bullets at once!</li>
+                <li><span class="key-term">Score:</span> Earn 5 points for each asteroid you destroy!</li>
+            </ul>
+        </div>
+
+        <button class="play-button playButton">START GAME</button>
     </div>
 
- 
-   
-    
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script type="module" src="src/main.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script type="module" src="src/main.js"></script>
 </body>
+
 </html>

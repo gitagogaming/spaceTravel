@@ -1,9 +1,10 @@
 # LEARN.md
 
-## Space Travel Game Overview
+## Void Horizon Game Overview
 
 ### Description
-Space Travel is an engaging web-based game where players navigate a spaceship to dodge asteroids and collect points. The spaceship can move left or right, and players must avoid asteroids while clicking on green elements to gather points. The game tracks progress with two labels: one for the distance traveled and another for the score points collected.
+Void Horizon is an engaging and dynamic web-based game where players navigate a spaceship to dodge asteroids, collect points, and activate powerful abilities. Players must maneuver left or right to avoid obstacles, collect green energy nodes for points, and now can grab special **powerups** that grant temporary advantages like shields, speed boosts, and score multipliers.
+
 
 ### Technologies Used
 
@@ -23,6 +24,10 @@ Space Travel is an engaging web-based game where players navigate a spaceship to
    - **DOM Manipulation**
      - Used to dynamically update game elements and display.
      - Enables real-time updates for the spaceship's position, score, and distance traveled.
+
+   - **Canvas Rendering**
+     - Utilizes the HTML5 `<canvas>` to render the spaceship, asteroids, score, and powerups.
+     - Uses JavaScript's `canvas` API to draw and animate game elements dynamically.
 
    - **Arrow Functions**
      - Provides concise and readable function expressions.
