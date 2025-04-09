@@ -50,7 +50,8 @@ export const bulletManager = new BulletManager();
 
 // PowerUp system
 export let activePowerUps = {
-    angleShooting: false
+    angleShooting: false,
+    multiShot: false
 };
 export let powerUpTimer = 0;
 export const POWERUP_DURATION = 600; // 10 seconds at 60fps
@@ -297,13 +298,17 @@ export function createPowerUp() {
     const powerUpX = Math.random() * (canvas.width - 30) + 15;
     const powerUpY = -30; // Start above the screen
     
+    // Randomly select a powerup type
+    const powerUpTypes = ['angleShooting', 'multiShot'];
+    const powerUpType = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+    
     powerUps.push({
         x: powerUpX,
         y: powerUpY,
         width: 30,
         height: 30,
         speed: defaultAsteroidFallSpeed * 0.8, // Slightly slower than asteroids
-        type: 'angleShooting'
+        type: powerUpType
     });
 }
 
@@ -366,12 +371,12 @@ export function drawPowerUps() {
     ctx.save();
     for (const powerUp of powerUps) {
         // Draw power-up icon
+        const centerX = powerUp.x + powerUp.width / 2;
+        const centerY = powerUp.y + powerUp.height / 2;
+        const radius = powerUp.width / 2;
+        
         if (powerUp.type === 'angleShooting') {
             // Draw angle shooting power-up
-            const centerX = powerUp.x + powerUp.width / 2;
-            const centerY = powerUp.y + powerUp.height / 2;
-            const radius = powerUp.width / 2;
-            
             // Draw circle background
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -387,6 +392,33 @@ export function drawPowerUps() {
             ctx.lineWidth = 3;
             ctx.strokeStyle = 'white';
             ctx.stroke();
+        } 
+        else if (powerUp.type === 'multiShot') {
+            // Draw multi-shot power-up
+            // Draw circle background
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#FF5722'; // Orange color
+            ctx.fill();
+            
+            // Draw three bullet indicators
+            const bulletSpacing = radius * 0.5;
+            
+            // Left bullet
+            ctx.beginPath();
+            ctx.arc(centerX - bulletSpacing, centerY - radius * 0.4, radius * 0.25, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            
+            // Center bullet
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - radius * 0.6, radius * 0.25, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Right bullet
+            ctx.beginPath();
+            ctx.arc(centerX + bulletSpacing, centerY - radius * 0.4, radius * 0.25, 0, Math.PI * 2);
+            ctx.fill();
         }
     }
     ctx.restore();
@@ -418,15 +450,27 @@ export function createPowerUpEffect(x, y) {
 
 // Draw a power-up indicator
 export function drawPowerUpIndicator() {
-    if (powerUpTimer > 0 && activePowerUps.angleShooting) {
+    if (powerUpTimer > 0) {
         const remainingTime = Math.ceil(powerUpTimer / 60); // Convert frames to seconds
         ctx.save();
         
-        // Draw text at the top of the screen
-        ctx.font = '16px Arial';
-        ctx.fillStyle = '#007BFF';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Angle Shooting: ${remainingTime}s`, canvas.width / 2, 30);
+        let yPos = 30;
+        
+        // Draw text for each active powerup
+        if (activePowerUps.angleShooting) {
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#007BFF';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Angle Shooting: ${remainingTime}s`, canvas.width / 2, yPos);
+            yPos += 25;
+        }
+        
+        if (activePowerUps.multiShot) {
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#FF5722';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Multi-Shot: ${remainingTime}s`, canvas.width / 2, yPos);
+        }
         
         ctx.restore();
     }

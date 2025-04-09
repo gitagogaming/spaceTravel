@@ -23,13 +23,42 @@ class BulletManager {
         const shipCenterX = shipRect.left + (shipRect.right - shipRect.left) / 2;
         const shipCenterY = shipRect.top;
 
-        let velocityX = 0;
-        let velocityY = -this.bulletSpeed; // Default is straight up
-        let angle = -Math.PI / 2; // Straight up
-
-        // If angle shooting powerup is active, calculate direction based on mouse position
-        if (activePowerUps.angleShooting) {
-            // Calculate angle between ship and mouse
+        // Determine firing angles based on powerups
+        let firingAngles = [];
+        
+        if (activePowerUps.multiShot) {
+            // If multi-shot is active, add multiple angles
+            
+            if (activePowerUps.angleShooting) {
+                // Calculate main angle based on mouse position
+                let angleToMouse = Math.atan2(this.mousePosition.y - shipCenterY, this.mousePosition.x - shipCenterX);
+                
+                // Convert to degrees for easier calculation
+                let angleDegrees = angleToMouse * (180 / Math.PI);
+                
+                // Restrict the angle to a 120-degree arc (from -30 to -150 degrees)
+                if (angleDegrees > -30) angleDegrees = -30;
+                if (angleDegrees < -150) angleDegrees = -150;
+                
+                // Convert back to radians
+                angleToMouse = angleDegrees * (Math.PI / 180);
+                
+                // Add main angle and offset angles
+                firingAngles = [
+                    angleToMouse,
+                    angleToMouse - Math.PI/12, // -15 degrees
+                    angleToMouse + Math.PI/12  // +15 degrees
+                ];
+            } else {
+                // Default straight up with spread
+                firingAngles = [
+                    -Math.PI/2,             // Straight up
+                    -Math.PI/2 - Math.PI/12, // Up-left
+                    -Math.PI/2 + Math.PI/12  // Up-right
+                ];
+            }
+        } else if (activePowerUps.angleShooting) {
+            // If only angle shooting is active
             let angleToMouse = Math.atan2(this.mousePosition.y - shipCenterY, this.mousePosition.x - shipCenterX);
             
             // Convert to degrees for easier calculation
@@ -40,23 +69,30 @@ class BulletManager {
             if (angleDegrees < -150) angleDegrees = -150;
             
             // Convert back to radians
-            angle = angleDegrees * (Math.PI / 180);
+            angleToMouse = angleDegrees * (Math.PI / 180);
             
-            // Calculate velocity components based on angle
-            velocityX = Math.cos(angle) * this.bulletSpeed;
-            velocityY = Math.sin(angle) * this.bulletSpeed;
+            firingAngles = [angleToMouse];
+        } else {
+            // Default straight up
+            firingAngles = [-Math.PI/2]; // Straight up
         }
+        
+        // Create bullets for each firing angle
+        for (const angle of firingAngles) {
+            const velocityX = Math.cos(angle) * this.bulletSpeed;
+            const velocityY = Math.sin(angle) * this.bulletSpeed;
 
-        this.bullets.push({
-            x: shipCenterX,
-            y: shipCenterY,
-            size: this.bulletSize,
-            velocityX: velocityX,
-            velocityY: velocityY,
-            speed: this.bulletSpeed,
-            color: this.bulletColor,
-            angle: angle
-        });
+            this.bullets.push({
+                x: shipCenterX,
+                y: shipCenterY,
+                size: this.bulletSize,
+                velocityX: velocityX,
+                velocityY: velocityY,
+                speed: this.bulletSpeed,
+                color: this.bulletColor,
+                angle: angle
+            });
+        }
     }
 
     updateBullets() {
