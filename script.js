@@ -1,12 +1,14 @@
 /* @Author: Nirajan Shrestha
    July 27,2024 
 */
-import { startDistanceScore, asteroids, shipRectUpdate, canvas, ctx, antiMatterManager, asteroidManager, bulletManager, bulletCooldown, maxBulletCooldown, updateBulletCooldown, handleBulletAsteroidCollision, updateParticles, drawParticles } from './gameState.js';
-// import { createAsteroid, updateAsteroids, drawAsteroid } from './asteroids.js';
+import { startDistanceScore, asteroids, shipRectUpdate, canvas, ctx, antiMatterManager, 
+         asteroidManager, bulletManager, bulletCooldown, maxBulletCooldown, 
+         updateBulletCooldown, handleBulletAsteroidCollision, updateParticles, 
+         drawParticles, drawAimingLine, powerUps, updatePowerUps, drawPowerUps, 
+         createPowerUp, drawPowerUpIndicator } from './gameState.js';
 import { addStar, drawStars } from './createStars.js';
 import { mobileControls } from './mobileControls.js';
 import { desktopControls } from './desktopControls.js';
-
 
 // try and follow guide and create a single 'game class' where eevryhing is initiated at... 
 // https://www.youtube.com/watch?v=7BHs1BzA4fs&t=1141s
@@ -62,6 +64,9 @@ function playGame(){
         antiMatterManager.createAntiMatterElement();
         startDistanceScore();
         
+        // Track mouse movement for aiming
+        canvas.addEventListener('mousemove', handleMouseMove);
+        
         // Add event listener for shooting
         canvas.addEventListener('click', handleShoot);
         document.addEventListener('keydown', (e) => {
@@ -69,6 +74,9 @@ function playGame(){
                 handleShoot();
             }
         });
+        
+        // Set up power-up spawn interval
+        setInterval(createPowerUp, 7000);
         
         gameLoop();
    
@@ -80,6 +88,16 @@ function playGame(){
             desktopControls();
         }
     })  
+}
+
+function handleMouseMove(event) {
+    // Get the position of the mouse relative to the canvas
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    // Update the bullet manager with the current mouse position
+    bulletManager.updateMousePosition(mouseX, mouseY);
 }
 
 function handleShoot() {
@@ -97,9 +115,17 @@ function gameLoop() {
     // Update bullet cooldown
     updateBulletCooldown();
     
+    // Update and draw power-ups
+    updatePowerUps();
+    drawPowerUps();
+    drawPowerUpIndicator();
+    
     // Update and draw bullets
     bulletManager.updateBullets();
     bulletManager.drawBullets();
+    
+    // Draw aiming line
+    drawAimingLine();
     
     // Check for bullet-asteroid collisions
     bulletManager.checkBulletAsteroidCollision(asteroids, handleBulletAsteroidCollision);

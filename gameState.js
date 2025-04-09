@@ -48,6 +48,15 @@ export const antiMatterManager = new AntiMatterManager();
 export const asteroidManager = new AsteroidManager();
 export const bulletManager = new BulletManager();
 
+// PowerUp system
+export let activePowerUps = {
+    angleShooting: false
+};
+export let powerUpTimer = 0;
+export const POWERUP_DURATION = 600; // 10 seconds at 60fps
+export let powerUps = [];  // Array to store all power-ups
+export let powerUpSpawnRate = 7000; // Spawn rate for power-ups in milliseconds
+
 export function shipRectUpdate(){
     shipRect = spaceShip.getBoundingClientRect();
 }
@@ -278,4 +287,192 @@ export function updateBulletCooldown() {
     if (bulletCooldown > 0) {
         bulletCooldown--;
     }
+}
+
+// Create a new powerup
+export function createPowerUp() {
+    if (isGameOver) return;
+    
+    // Create a power-up at a random position
+    const powerUpX = Math.random() * (canvas.width - 30) + 15;
+    const powerUpY = -30; // Start above the screen
+    
+    powerUps.push({
+        x: powerUpX,
+        y: powerUpY,
+        width: 30,
+        height: 30,
+        speed: defaultAsteroidFallSpeed * 0.8, // Slightly slower than asteroids
+        type: 'angleShooting'
+    });
+}
+
+// Update all powerups
+export function updatePowerUps() {
+    // Update existing power-ups
+    for (let i = 0; i < powerUps.length; i++) {
+        const powerUp = powerUps[i];
+        powerUp.y += powerUp.speed;
+        
+        // Remove power-ups that have moved off screen
+        if (powerUp.y > canvas.height) {
+            powerUps.splice(i, 1);
+            i--;
+            continue;
+        }
+        
+        // Check for collision with ship
+        const shipRect = getShipRect();
+        const powerUpRect = {
+            left: powerUp.x,
+            top: powerUp.y,
+            right: powerUp.x + powerUp.width,
+            bottom: powerUp.y + powerUp.height
+        };
+        
+        if (!(shipRect.right < powerUpRect.left ||
+            shipRect.left > powerUpRect.right ||
+            shipRect.bottom < powerUpRect.top ||
+            shipRect.top > powerUpRect.bottom)) {
+            
+            // Activate the power-up
+            activePowerUps[powerUp.type] = true;
+            powerUpTimer = POWERUP_DURATION;
+            
+            // Remove the power-up
+            powerUps.splice(i, 1);
+            i--;
+            
+            // Add a visual effect
+            createPowerUpEffect(shipRect.left + (shipRect.right - shipRect.left) / 2, shipRect.top);
+        }
+    }
+    
+    // Update power-up timer
+    if (powerUpTimer > 0) {
+        powerUpTimer--;
+        
+        // Deactivate power-ups when timer expires
+        if (powerUpTimer === 0) {
+            Object.keys(activePowerUps).forEach(key => {
+                activePowerUps[key] = false;
+            });
+        }
+    }
+}
+
+// Draw all powerups
+export function drawPowerUps() {
+    ctx.save();
+    for (const powerUp of powerUps) {
+        // Draw power-up icon
+        if (powerUp.type === 'angleShooting') {
+            // Draw angle shooting power-up
+            const centerX = powerUp.x + powerUp.width / 2;
+            const centerY = powerUp.y + powerUp.height / 2;
+            const radius = powerUp.width / 2;
+            
+            // Draw circle background
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#007BFF';
+            ctx.fill();
+            
+            // Draw angle indicator
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + radius * 0.8 * Math.cos(-Math.PI/4), centerY + radius * 0.8 * Math.sin(-Math.PI/4));
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + radius * 0.8 * Math.cos(-3*Math.PI/4), centerY + radius * 0.8 * Math.sin(-3*Math.PI/4));
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'white';
+            ctx.stroke();
+        }
+    }
+    ctx.restore();
+}
+
+// Create a visual effect when power-up is collected
+export function createPowerUpEffect(x, y) {
+    const particleCount = 30;
+    const colors = ['#3498db', '#2980b9', '#1abc9c', '#16a085'];
+    
+    for (let i = 0; i < particleCount; i++) {
+        const size = Math.random() * 5 + 2;
+        const speed = Math.random() * 4 + 1;
+        const angle = Math.random() * Math.PI * 2;
+        const velocityX = Math.cos(angle) * speed;
+        const velocityY = Math.sin(angle) * speed;
+        
+        particles.push({
+            x: x,
+            y: y,
+            size: size,
+            velocityX: velocityX,
+            velocityY: velocityY,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            lifespan: 40 + Math.random() * 20
+        });
+    }
+}
+
+// Draw a power-up indicator
+export function drawPowerUpIndicator() {
+    if (powerUpTimer > 0 && activePowerUps.angleShooting) {
+        const remainingTime = Math.ceil(powerUpTimer / 60); // Convert frames to seconds
+        ctx.save();
+        
+        // Draw text at the top of the screen
+        ctx.font = '16px Arial';
+        ctx.fillStyle = '#007BFF';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Angle Shooting: ${remainingTime}s`, canvas.width / 2, 30);
+        
+        ctx.restore();
+    }
+}
+
+// Draw aiming line to show where bullets will fire
+export function drawAimingLine() {
+    if (isGameOver || !activePowerUps.angleShooting) return;
+    
+    const shipRect = getShipRect();
+    const shipCenterX = shipRect.left + (shipRect.right - shipRect.left) / 2;
+    const shipCenterY = shipRect.top;
+    
+    const mousePos = bulletManager.mousePosition;
+    
+    // Calculate angle between ship and mouse
+    let angleToMouse = Math.atan2(mousePos.y - shipCenterY, mousePos.x - shipCenterX);
+    
+    // Convert to degrees for easier calculation
+    let angleDegrees = angleToMouse * (180 / Math.PI);
+    
+    // Restrict the angle to a 120-degree arc (from -30 to -150 degrees)
+    if (angleDegrees > -30) angleDegrees = -30;
+    if (angleDegrees < -150) angleDegrees = -150;
+    
+    // Convert back to radians
+    angleToMouse = angleDegrees * (Math.PI / 180);
+    
+    // Calculate end point for line
+    const lineLength = 40;
+    const endX = shipCenterX + Math.cos(angleToMouse) * lineLength;
+    const endY = shipCenterY + Math.sin(angleToMouse) * lineLength;
+    
+    // Draw the aiming line
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(shipCenterX, shipCenterY);
+    ctx.lineTo(endX, endY);
+    ctx.strokeStyle = 'rgba(255, 149, 0, 0.6)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw a small circle at the end of the line
+    ctx.beginPath();
+    ctx.arc(endX, endY, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#FF9500';
+    ctx.fill();
+    ctx.restore();
 }
