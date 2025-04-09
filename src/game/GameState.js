@@ -324,7 +324,17 @@ export function updatePowerUps() {
     // Update existing power-ups
     for (let i = 0; i < powerUps.length; i++) {
         const powerUp = powerUps[i];
-        powerUp.y += powerUp.speed;
+        
+        // Adjusting fall speed based on ship speed
+        const baseSpeed = powerUp.speed;
+        const speedVariance = Math.random() * 0.4 - 0.2; // Random variance between -0.2 and 0.2
+        const adjustedSpeed = baseSpeed * (1 + speedVariance) * (shipMovementSpeed / 2);
+        
+        // Update position with the adjusted speed
+        powerUp.y += adjustedSpeed;
+        
+        // Add slight horizontal movement for more interesting effect
+        // powerUp.x += Math.cos(powerUp.y * 0.05) * (shipMovementSpeed * 0.15);
         
         // Remove power-ups that have moved off screen
         if (powerUp.y > canvas.height) {
@@ -381,7 +391,7 @@ export function drawPowerUps() {
         const centerX = powerUp.x + powerUp.width / 2;
         const centerY = powerUp.y + powerUp.height / 2;
         const radius = powerUp.width / 2;
-        
+
         if (powerUp.type === 'angleShooting') {
             // Draw angle shooting power-up
             // Draw circle background
