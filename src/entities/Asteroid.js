@@ -41,6 +41,7 @@ class AsteroidManager {
     }
 
     drawAsteroid = (asteroid) => {
+        if (GameState.isGameOver) return;
         // Save the current canvas state
         this.ctx.save();
         

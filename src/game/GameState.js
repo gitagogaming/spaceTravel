@@ -137,7 +137,7 @@ function restartGame(){
 
 const MAX_SPEED = 6.5;
 const MIN_SPEED = 1.0;
-const SPEED_INCREMENT = 0.01; // More gradual increment
+const SPEED_INCREMENT = 0.15; // More gradual increment
 
 export function increaseShipSpeed(){
     if (shipMovementSpeed + SPEED_INCREMENT <= MAX_SPEED) {
@@ -146,6 +146,9 @@ export function increaseShipSpeed(){
         shipMovementSpeed = MAX_SPEED;
     }
     antiMatterManager.updateFallSpeed(defaultAntiMatterFallSpeed);
+
+    // shipSpeedValue
+    document.getElementById("shipSpeedValue").innerText = `${shipMovementSpeed.toFixed(2)}`;
 }
 
 export function decreaseShipSpeed(){
@@ -154,6 +157,8 @@ export function decreaseShipSpeed(){
     } else {
         shipMovementSpeed = MIN_SPEED;
     }
+
+    document.getElementById("shipSpeedValue").innerText = `${shipMovementSpeed.toFixed(2)}`;
 }
 
 export function increaseGameSpeed(){

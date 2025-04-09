@@ -148,9 +148,11 @@ p, li, ul{
 .gameOver{
   display: none;
   position: fixed;
-  top: 50%;
+  top: 25%;
+  padding: 50px;
   width: 100vw;
 }
+
 
 /* Styles for info screen */
 .gameInfo{
@@ -306,6 +308,7 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  margin-top: 40px;
   background: rgba(15, 15, 35, 0.8);
   border-radius: 15px;
   box-shadow: 0 0 40px rgba(100, 100, 255, 0.3);

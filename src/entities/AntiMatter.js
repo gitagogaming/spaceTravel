@@ -53,6 +53,8 @@ class AntiMatterManager {
     }
 
     drawAntiMatter() {
+        if (GameState.isGameOver) return;
+
         this.ctx.save();
         
         // Create antimatter image object if it doesn't exist yet

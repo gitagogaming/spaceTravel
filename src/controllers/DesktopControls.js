@@ -1,4 +1,4 @@
-import { increaseShipSpeed, decreaseShipSpeed, increaseGameSpeed, decreaseGameSpeed } from '../game/GameState.js';
+import { shipMovementSpeed, increaseShipSpeed, decreaseShipSpeed, increaseGameSpeed, decreaseGameSpeed } from '../game/GameState.js';
 
 export function desktopControls() {
     const spaceShip = document.getElementById("spaceShip");
@@ -23,9 +23,13 @@ export function desktopControls() {
         } else if (e.key === 'ArrowRight' || e.key === 'd') {
             isRightKeyPressed = true;
         } else if (e.key === 'w') {
+            // update shipmovement speed text
+            // shipSpeedValue.innerText = `${shipMovementSpeed}`;
+            increaseShipSpeed();
             increaseGameSpeed();
         } else if (e.key === 's') {
             decreaseGameSpeed();
+            decreaseShipSpeed();
         }
     });
     
@@ -42,12 +46,12 @@ export function desktopControls() {
     // or maybe some wacky powerup?
     
     // mouse listener for movement
-    document.addEventListener('mousemove', (e) => {
-        const rect = spaceShip.getBoundingClientRect();
-        const mouseX = e.clientX - rect.width / 2; // Center the ship on the mouse
-        shipLeft = Math.max(0, Math.min(mouseX, window.innerWidth - rect.width)); // Prevent going off screen
-        spaceShip.style.left = shipLeft + "px";
-    });
+    // document.addEventListener('mousemove', (e) => {
+    //     const rect = spaceShip.getBoundingClientRect();
+    //     const mouseX = e.clientX - rect.width / 2; // Center the ship on the mouse
+    //     shipLeft = Math.max(0, Math.min(mouseX, window.innerWidth - rect.width)); // Prevent going off screen
+    //     spaceShip.style.left = shipLeft + "px";
+    // });
 
 
     // document.addEventListener('mousemove', (e) => {
